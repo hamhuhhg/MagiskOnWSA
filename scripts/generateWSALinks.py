@@ -21,12 +21,12 @@
 import sys
 
 import requests
-from xml.dom import minidom
 import html
 import warnings
 import re
 import os
 from pathlib import Path
+import defusedxml.minidom
 
 warnings.filterwarnings("ignore")
 
@@ -48,7 +48,7 @@ out = requests.post(
     headers={'Content-Type': 'application/soap+xml; charset=utf-8'},
     verify=False
 )
-doc = minidom.parseString(out.text)
+doc = defusedxml.minidom.parseString(out.text)
 cookie = doc.getElementsByTagName('EncryptedData')[0].firstChild.nodeValue
 
 with open(Path.cwd().parent / "xml/WUIDRequest.xml", "r") as f:
@@ -61,7 +61,7 @@ out = requests.post(
     verify=False
 )
 
-doc = minidom.parseString(html.unescape(out.text))
+doc = defusedxml.minidom.parseString(html.unescape(out.text))
 
 filenames = {}
 for node in doc.getElementsByTagName('Files'):
@@ -101,7 +101,7 @@ for i, v, f in identities:
         headers={'Content-Type': 'application/soap+xml; charset=utf-8'},
         verify=False
     )
-    doc = minidom.parseString(out.text)
+    doc = defusedxml.minidom.parseString(out.text)
     for l in doc.getElementsByTagName("FileLocation"):
         url = l.getElementsByTagName("Url")[0].firstChild.nodeValue
         if len(url) != 99:
