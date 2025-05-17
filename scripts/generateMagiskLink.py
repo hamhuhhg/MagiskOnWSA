@@ -33,7 +33,7 @@ if not magisk_ver:
     magisk_ver = "stable"
 if magisk_ver == "stable" or magisk_ver == "beta" or magisk_ver == "canary" or magisk_ver == "debug":
     magisk_link = json.loads(requests.get(
-        f"https://github.com/topjohnwu/magisk-files/raw/master/{magisk_ver}.json").content)['magisk']['link']
+        f"https://github.com/topjohnwu/magisk-files/raw/master/{magisk_ver}.json", timeout=60).content)['magisk']['link']
 print(f"download link: {magisk_link}", flush=True)
 
 with open(download_dir/tempScript, 'a') as f:

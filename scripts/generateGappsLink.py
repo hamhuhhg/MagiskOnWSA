@@ -37,14 +37,14 @@ abi_map = {"x64": "x86_64", "arm64": "arm64"}
 # download the corresponding version
 release = "11.0"
 try:
-    res = requests.get(f"https://api.opengapps.org/list")
+    res = requests.get(f"https://api.opengapps.org/list", timeout=60)
     j = json.loads(res.content)
     link = {i["name"]: i for i in j["archs"][abi_map[arch]]
             ["apis"][release]["variants"]}[variant]["zip"]
 except Exception:
     print("Failed to fetch from OpenGApps API, fallbacking to SourceForge RSS...")
     res = requests.get(
-        f'https://sourceforge.net/projects/opengapps/rss?path=/{abi_map[arch]}&limit=100')
+        f'https://sourceforge.net/projects/opengapps/rss?path=/{abi_map[arch]}&limit=100', timeout=60)
     link = re.search(f'https://.*{abi_map[arch]}/.*{release}.*{variant}.*\.zip/download', res.text).group().replace(
         '.zip/download', '.zip').replace('sourceforge.net/projects/opengapps/files', 'downloads.sourceforge.net/project/opengapps')
 
