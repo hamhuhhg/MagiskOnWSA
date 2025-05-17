@@ -46,8 +46,8 @@ out = requests.post(
     'https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx',
     data=cookie_content,
     headers={'Content-Type': 'application/soap+xml; charset=utf-8'},
-    verify=False
-)
+    verify=False, 
+timeout=60)
 doc = minidom.parseString(out.text)
 cookie = doc.getElementsByTagName('EncryptedData')[0].firstChild.nodeValue
 
@@ -58,8 +58,8 @@ out = requests.post(
     'https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx',
     data=cat_id_content,
     headers={'Content-Type': 'application/soap+xml; charset=utf-8'},
-    verify=False
-)
+    verify=False, 
+timeout=60)
 
 doc = minidom.parseString(html.unescape(out.text))
 
@@ -99,8 +99,8 @@ for i, v, f in identities:
         'https://fe3.delivery.mp.microsoft.com/ClientWebService/client.asmx/secured',
         data=file_content.format(i, v, release_type),
         headers={'Content-Type': 'application/soap+xml; charset=utf-8'},
-        verify=False
-    )
+        verify=False, 
+    timeout=60)
     doc = minidom.parseString(out.text)
     for l in doc.getElementsByTagName("FileLocation"):
         url = l.getElementsByTagName("Url")[0].firstChild.nodeValue
