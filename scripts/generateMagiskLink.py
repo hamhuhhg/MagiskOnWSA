@@ -22,8 +22,8 @@ import sys
 
 import os
 import json
-import requests
 from pathlib import Path
+from security import safe_requests
 
 magisk_ver = sys.argv[1]
 download_dir = Path.cwd().parent / "download" if sys.argv[2] == "" else Path(sys.argv[2]).resolve()
@@ -32,7 +32,7 @@ print(f"Generating Magisk download link: release type={magisk_ver}", flush=True)
 if not magisk_ver:
     magisk_ver = "stable"
 if magisk_ver == "stable" or magisk_ver == "beta" or magisk_ver == "canary" or magisk_ver == "debug":
-    magisk_link = json.loads(requests.get(
+    magisk_link = json.loads(safe_requests.get(
         f"https://github.com/topjohnwu/magisk-files/raw/master/{magisk_ver}.json").content)['magisk']['link']
 print(f"download link: {magisk_link}", flush=True)
 
