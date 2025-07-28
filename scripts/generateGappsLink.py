@@ -25,6 +25,7 @@ import os
 import json
 import re
 from pathlib import Path
+from security import safe_requests
 
 arch = sys.argv[1]
 variant = sys.argv[2]
@@ -43,7 +44,7 @@ try:
             ["apis"][release]["variants"]}[variant]["zip"]
 except Exception:
     print("Failed to fetch from OpenGApps API, fallbacking to SourceForge RSS...")
-    res = requests.get(
+    res = safe_requests.get(
         f'https://sourceforge.net/projects/opengapps/rss?path=/{abi_map[arch]}&limit=100')
     link = re.search(f'https://.*{abi_map[arch]}/.*{release}.*{variant}.*\.zip/download', res.text).group().replace(
         '.zip/download', '.zip').replace('sourceforge.net/projects/opengapps/files', 'downloads.sourceforge.net/project/opengapps')
